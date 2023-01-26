@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Hosting.StaticWebAssets;
-using Microsoft.AspNetCore.ResponseCompression;
+﻿using BlazorKiteConnect.Server.Configuration;
+using FastEndpoints;
+using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,8 +8,12 @@ StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configurat
 
 // Add services to the container.
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddFastEndpoints();
 builder.Services.AddRazorPages();
+
+//configuration
+builder.Services.Configure<AppDetails>(builder.Configuration.GetSection(nameof(AppDetails)));
+builder.Services.Configure<KiteSettings>(builder.Configuration.GetSection("Zerodha"));
 
 var app = builder.Build();
 
@@ -33,7 +38,7 @@ app.UseRouting();
 
 
 app.MapRazorPages();
-app.MapControllers();
+app.UseFastEndpoints();
 app.MapFallbackToFile("index.html");
 
 app.Run();

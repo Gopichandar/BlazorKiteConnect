@@ -2,22 +2,20 @@
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
+		<RootNamespace>BlazorKiteConnect.Server</RootNamespace>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 	  <UserSecretsId>b519bb73-ff18-490a-8cc5-cd5692f32e89</UserSecretsId>
   </PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="FastEndpoints" Version="5.6.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Client\Client.csproj" />
 	  <ProjectReference Include="..\Shared\Shared.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Controllers\" />
 	</ItemGroup>
 
 
