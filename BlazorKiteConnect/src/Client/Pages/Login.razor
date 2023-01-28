@@ -1,4 +1,6 @@
 ﻿@page "/login"
+@using System.Web;
+
 
 <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@OnLogin">Sign in with kite</MudButton>
 
@@ -6,30 +8,27 @@
     [Inject]
     public NavigationManager NavigationManager { get; set; }
 
-    [Parameter]
-    [SupplyParameterFromQuery(Name = "action")]
-    public string Action { get; set; }
+    [Inject]
+    public HttpClient HttpClient { get; set; }
 
-    [Parameter]
-    [SupplyParameterFromQuery(Name = "type")]
-    public string Type { get; set; }
+    [Inject]
+    public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
-    [Parameter]
-    [SupplyParameterFromQuery(Name = "status")]
-    public bool Status { get; set; }
-
-    [Parameter]
-    [SupplyParameterFromQuery(Name = "request_token")]
-    public string RequestToken { get; set; }
-
-    protected override void OnParametersSet()
+    protected override async Task OnInitializedAsync()
     {
-        if (Status && !string.IsNullOrEmpty(RequestToken))
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri); //you can use IURIHelper for older versions
+        var queries = uri.Query == null ? null : HttpUtility.ParseQueryString(uri.Query);
+        if (queries is not null && queries["status"] == "success" && queries["request_token"] is not null)
         {
-            
+            var response = await HttpClient.GetAsync("api/login/token?request_token=" + queries["request_token"]);
+            if (response.IsSuccessStatusCode)
+            {
+                var currentUser = await response.Content.ReadFromJsonAsync<GetTokenReponse>();
+                await ((CookieAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsAuthenticated(currentUser.Data.Email);
+                NavigationManager.NavigateTo("/", true);
+            }
         }
-        base.OnParametersSet();
-    }
+    }   
 
     private void OnLogin()
     {

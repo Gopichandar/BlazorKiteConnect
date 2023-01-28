@@ -14,7 +14,7 @@ builder.Services.AddMudServices();
 
 // cookie
 builder.Services
-    .AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>()    
-    .AddAuthorizationCore();    
+    .AddScoped<AuthenticationStateProvider, CookieAuthenticationStateProvider>()    
+    .AddAuthorizationCore();
 
 await builder.Build().RunAsync();

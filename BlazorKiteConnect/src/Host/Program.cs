@@ -1,5 +1,8 @@
-﻿using BlazorKiteConnect.Server.Configuration;
+﻿using BlazorKiteConnect.Server.Application.Interface;
+using BlazorKiteConnect.Server.Configuration;
+using BlazorKiteConnect.Server.Services;
 using FastEndpoints;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +17,14 @@ builder.Services.AddRazorPages();
 //configuration
 builder.Services.Configure<AppDetails>(builder.Configuration.GetSection(nameof(AppDetails)));
 builder.Services.Configure<KiteSettings>(builder.Configuration.GetSection("Zerodha"));
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
@@ -33,6 +44,9 @@ app.UseHttpsRedirection();
 
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseRouting();
 

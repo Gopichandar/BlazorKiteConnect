@@ -17,7 +17,7 @@ namespace BlazorKiteConnect.Server.Endpoints.Login
 
         public override void Configure()
         {
-            Get("/api/login/authorize");
+            Get("api/login/authorize");
             AllowAnonymous();
         }
 
