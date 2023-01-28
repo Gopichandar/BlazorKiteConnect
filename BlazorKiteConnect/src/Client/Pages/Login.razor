@@ -1,0 +1,38 @@
+﻿@page "/login"
+
+<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@OnLogin">Sign in with kite</MudButton>
+
+@code{
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "action")]
+    public string Action { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "type")]
+    public string Type { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "status")]
+    public bool Status { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "request_token")]
+    public string RequestToken { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        if (Status && !string.IsNullOrEmpty(RequestToken))
+        {
+            
+        }
+        base.OnParametersSet();
+    }
+
+    private void OnLogin()
+    {
+        NavigationManager.NavigateTo("/api/login/authorize", true);
+    }
+}
