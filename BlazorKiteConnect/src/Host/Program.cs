@@ -1,4 +1,5 @@
 ﻿using BlazorKiteConnect.Server.Application.Interface;
+using BlazorKiteConnect.Server.Application.Interface.Login;
 using BlazorKiteConnect.Server.Configuration;
 using BlazorKiteConnect.Server.Services;
 using BlazorKiteConnect.Shared.Constants;
@@ -37,6 +38,9 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddHttpClient();
+
+//services
+builder.Services.AddScoped<ILoginService, LoginService>();
 
 var app = builder.Build();
 
