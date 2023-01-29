@@ -19,7 +19,11 @@ builder.Services.Configure<AppDetails>(builder.Configuration.GetSection(nameof(A
 builder.Services.Configure<KiteSettings>(builder.Configuration.GetSection("Zerodha"));
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie();
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/login";
+                    options.AccessDeniedPath = new PathString("/login");
+                });
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
@@ -44,12 +48,10 @@ app.UseHttpsRedirection();
 
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseRouting();
-
 
 app.MapRazorPages();
 app.UseFastEndpoints();

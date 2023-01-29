@@ -27,17 +27,24 @@ namespace BlazorKiteConnect.Server.Endpoints.Login
         }
         public override void Configure()
         {
-            Get("api/profile");            
+            Get("api/profile");
+            AllowAnonymous();
         }
 
         public override async Task HandleAsync(CancellationToken ct)
-        {   
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                await SendUnauthorizedAsync();
+                return;
+            }
+
             Dictionary<string, string> nvc = new Dictionary<string, string>
             {
                 { "api_key", _currentUserService.ApiKey },
                 { "request_token", _currentUserService.RequestToken },                
             };
-            var request = new HttpRequestMessage(System.Net.Http.HttpMethod.Post, "https://api.kite.trade/user/profile") { Content = new FormUrlEncodedContent(nvc) };
+            var request = new HttpRequestMessage(System.Net.Http.HttpMethod.Get, "https://api.kite.trade/user/profile") { Content = new FormUrlEncodedContent(nvc) };
             request.Headers.Add("X-Kite-Version", "3");
             request.Headers.Add("Authorization", $"token {_currentUserService.ApiKey}:{_currentUserService.AccessToken}");
             var response = await _httpClient.SendAsync(request);

@@ -18,15 +18,25 @@
         </MudContainer>        
     </NotAuthorized>
     <Authorized>
-        <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
-            <MudDrawerHeader>
-                <MudText Typo="Typo.h6">Client</MudText>
-            </MudDrawerHeader>
-            <NavMenu />
-        </MudDrawer>
-        <MainLayout>            
-             @Body            
-        </MainLayout>
+        <MudLayout>
+            <MudAppBar Elevation="0">
+                <MudTooltip Text="Toggle Drawer">
+                    <MudIconButton Icon="@Icons.Rounded.Notes" Color="Color.Inherit" Edge="Edge.Start"
+                        OnClick="@((e) => DrawerToggle())" />
+                </MudTooltip>
+            </MudAppBar>
+            <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
+                <MudDrawerHeader>
+                    <MudText Typo="Typo.h6">Client</MudText>
+                </MudDrawerHeader>
+                <NavMenu />
+            </MudDrawer>
+            <MudMainContent>
+                <MudContainer MaxWidth="MaxWidth.Large" Class="my-16 pt-16">
+                    @Body
+                </MudContainer>
+            </MudMainContent>
+        </MudLayout>
     </Authorized>
 </AuthorizeView>    
 
