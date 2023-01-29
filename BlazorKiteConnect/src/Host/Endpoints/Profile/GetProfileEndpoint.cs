@@ -28,16 +28,16 @@ namespace BlazorKiteConnect.Server.Endpoints.Login
         public override void Configure()
         {
             Get("api/profile");
-            AllowAnonymous();
+            //AllowAnonymous();
         }
 
         public override async Task HandleAsync(CancellationToken ct)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                await SendUnauthorizedAsync();
-                return;
-            }
+            //if (!User.Identity.IsAuthenticated)
+            //{
+            //    await SendUnauthorizedAsync();
+            //    return;
+            //}
 
             Dictionary<string, string> nvc = new Dictionary<string, string>
             {

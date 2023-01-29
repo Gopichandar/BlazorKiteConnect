@@ -1,6 +1,7 @@
 ﻿using BlazorKiteConnect.Server.Application.Interface;
 using BlazorKiteConnect.Server.Configuration;
 using BlazorKiteConnect.Server.Services;
+using BlazorKiteConnect.Shared.Constants;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
@@ -19,10 +20,17 @@ builder.Services.Configure<AppDetails>(builder.Configuration.GetSection(nameof(A
 builder.Services.Configure<KiteSettings>(builder.Configuration.GetSection("Zerodha"));
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
+                .AddCookie((o) =>
                 {
-                    options.LoginPath = "/login";
-                    options.AccessDeniedPath = new PathString("/login");
+                    o.Cookie.Name = AppConstants.CookieName;
+                    o.Cookie.HttpOnly = true;
+                    o.LoginPath = string.Empty;
+                    o.AccessDeniedPath = string.Empty;
+                    o.Events.OnRedirectToLogin = context =>
+                    {
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        return Task.CompletedTask;
+                    };
                 });
 
 builder.Services.AddHttpContextAccessor();
