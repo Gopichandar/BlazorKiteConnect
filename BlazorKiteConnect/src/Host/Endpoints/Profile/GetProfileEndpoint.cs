@@ -12,18 +12,17 @@ using System.Text;
 using BlazorKiteConnect.Shared.Constants;
 using BlazorKiteConnect.Server.Application.Interface;
 using BlazorKiteConnect.Shared.KiteModel;
+using BlazorKiteConnect.Server.Application.Interface.Profile;
 
 namespace BlazorKiteConnect.Server.Endpoints.Login
 {
     public class GetProfileEndpoint : EndpointWithoutRequest
-    {
-        private readonly HttpClient _httpClient;        
-        private readonly ICurrentUserService _currentUserService;
+    {        
+        private readonly IProfileService _profileService;
 
-        public GetProfileEndpoint(IHttpClientFactory httpClientFactory, ICurrentUserService currentUserService)
+        public GetProfileEndpoint(IProfileService profileService)
         {
-            _httpClient = httpClientFactory.CreateClient();            
-            _currentUserService = currentUserService;
+            _profileService = profileService;
         }
         public override void Configure()
         {
@@ -33,31 +32,18 @@ namespace BlazorKiteConnect.Server.Endpoints.Login
 
         public override async Task HandleAsync(CancellationToken ct)
         {
-            //if (!User.Identity.IsAuthenticated)
-            //{
-            //    await SendUnauthorizedAsync();
-            //    return;
-            //}
+            var result = await _profileService.Create("")
+                .PrepareRequestBody()
+                .AddRequiredHeader()
+                .SendRequestAsync();
 
-            Dictionary<string, string> nvc = new Dictionary<string, string>
-            {
-                { "api_key", _currentUserService.ApiKey },
-                { "request_token", _currentUserService.RequestToken },                
-            };
-            var request = new HttpRequestMessage(System.Net.Http.HttpMethod.Get, "https://api.kite.trade/user/profile") { Content = new FormUrlEncodedContent(nvc) };
-            request.Headers.Add("X-Kite-Version", "3");
-            request.Headers.Add("Authorization", $"token {_currentUserService.ApiKey}:{_currentUserService.AccessToken}");
-            var response = await _httpClient.SendAsync(request);
-            if (response.IsSuccessStatusCode)
-            {
-                var message = await response.Content.ReadFromJsonAsync<GetProfileResponse>();
-
-                if (message != null && message.Status == "success")
-                {  
-                    await SendAsync(message, 200, ct);
-                    return;
-                }
-            }
+            var message = result.GetResponse();
+                
+            if (message != null && message.Status == "success")
+            {  
+                await SendAsync(message, 200, ct);
+                return;
+            }           
             await SendUnauthorizedAsync(ct);
         }
     }    

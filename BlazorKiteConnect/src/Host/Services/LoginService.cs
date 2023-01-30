@@ -1,4 +1,5 @@
-﻿using BlazorKiteConnect.Server.Application.Interface.Login;
+﻿using BlazorKiteConnect.Server.Application.Interface;
+using BlazorKiteConnect.Server.Application.Interface.Login;
 using BlazorKiteConnect.Server.Configuration;
 using BlazorKiteConnect.Server.KiteModel;
 using Microsoft.Extensions.Options;
@@ -8,7 +9,7 @@ using System.Text;
 
 namespace BlazorKiteConnect.Server.Services
 {
-    public class LoginService : ICompiledLoginService
+    public class LoginService : ILoginService
     {
         private readonly HttpClient _httpClient;
         private readonly IOptions<KiteSettings> _kiteSettings;
@@ -26,28 +27,15 @@ namespace BlazorKiteConnect.Server.Services
             _appDetails = appDetails;
         }
 
-        public IPrepareChecksum Create(string requestToken) 
+        public IPrepareRequestBody<GetTokenReponse> Create(string requestToken)
         {
             this.requestToken = requestToken;
             return this;
         }
 
-        public IPrepareBodyParameters PrepareChecksum()
+        public IAddRequiredHeader<GetTokenReponse> PrepareRequestBody()
         {
-            var concatenatedString = _appDetails.Value.AppKey + requestToken + _appDetails.Value.AppSecret;
-            using var sha256 = SHA256.Create();
-            var hashedValue = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(concatenatedString));
-            StringBuilder hexhash = new StringBuilder();
-            foreach (byte b in hashedValue)
-            {
-                hexhash.Append(b.ToString("x2"));
-            }
-            hexhashString = hexhash.ToString();
-            return this;
-        }
-
-        public IAddRequiredHeader PrepareBodyParameters() 
-        {
+            string checksumValue = PrepareChecksum();
             Dictionary<string, string> nvc = new Dictionary<string, string>
             {
                 { "api_key", _appDetails.Value.AppKey },
@@ -58,13 +46,13 @@ namespace BlazorKiteConnect.Server.Services
             return this;
         }
 
-        public ISendRequest AddRequiredHeader()
+        public ISendRequest<GetTokenReponse> AddRequiredHeader()
         {
             httpRequestMessage.Headers.Add("X-Kite-Version", "3");
             return this;
         }
 
-        public async Task<IGetResponse> SendRequestAsync()
+        public async Task<IGetResponse<GetTokenReponse>> SendRequestAsync()
         {
             var response = await _httpClient.SendAsync(httpRequestMessage);
             if (response.IsSuccessStatusCode)
@@ -72,12 +60,26 @@ namespace BlazorKiteConnect.Server.Services
                 responseModel = await response.Content.ReadFromJsonAsync<GetTokenReponse>();
                 return this;
             }
-            throw new UnauthorizedAccessException(response.StatusCode.ToString());            
+            throw new UnauthorizedAccessException(response.StatusCode.ToString());
         }
 
         public GetTokenReponse GetResponse()
         {
             return responseModel;
-        }      
+        }
+
+        private string PrepareChecksum()
+        {
+            var concatenatedString = _appDetails.Value.AppKey + requestToken + _appDetails.Value.AppSecret;
+            using var sha256 = SHA256.Create();
+            var hashedValue = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(concatenatedString));
+            StringBuilder hexhash = new StringBuilder();
+            foreach (byte b in hashedValue)
+            {
+                hexhash.Append(b.ToString("x2"));
+            }
+            hexhashString = hexhash.ToString();
+            return hexhashString;
+        }    
     }
 }

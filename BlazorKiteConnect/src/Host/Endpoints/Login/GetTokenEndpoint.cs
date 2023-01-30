@@ -1,4 +1,5 @@
 ﻿using BlazorKiteConnect.Server.Application.Interface.Login;
+using BlazorKiteConnect.Server.KiteModel;
 using BlazorKiteConnect.Shared.Constants;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication;
@@ -25,9 +26,8 @@ namespace BlazorKiteConnect.Server.Endpoints.Login
         {           
             string? requestToken = Query<string>("request_token");
 
-            var result = await _loginService.Create(requestToken)
-                .PrepareChecksum()
-                .PrepareBodyParameters()
+            var result = await _loginService.Create(requestToken)                
+                .PrepareRequestBody()
                 .AddRequiredHeader()
                 .SendRequestAsync();
 

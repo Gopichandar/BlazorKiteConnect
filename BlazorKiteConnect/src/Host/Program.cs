@@ -1,5 +1,6 @@
 ﻿using BlazorKiteConnect.Server.Application.Interface;
 using BlazorKiteConnect.Server.Application.Interface.Login;
+using BlazorKiteConnect.Server.Application.Interface.Profile;
 using BlazorKiteConnect.Server.Configuration;
 using BlazorKiteConnect.Server.Services;
 using BlazorKiteConnect.Shared.Constants;
@@ -41,6 +42,7 @@ builder.Services.AddHttpClient();
 
 //services
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
 
 var app = builder.Build();
 
