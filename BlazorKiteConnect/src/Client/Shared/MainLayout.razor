@@ -24,6 +24,11 @@
                     <MudIconButton Icon="@Icons.Rounded.Notes" Color="Color.Inherit" Edge="Edge.Start"
                         OnClick="@((e) => DrawerToggle())" />
                 </MudTooltip>
+                <MudSpacer/>
+                <MudTooltip Text="Logout">
+                    <MudIconButton Icon="@Icons.Rounded.Logout" Color="Color.Inherit" Edge="Edge.End"
+                                   OnClick="@((e) => Logout())" />
+                </MudTooltip>
             </MudAppBar>
             <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
                 <MudDrawerHeader>
@@ -44,8 +49,23 @@
 @code {
     bool _drawerOpen = true;
 
+    [Inject]
+    public HttpClient HttpClient { get; set; }
+
+    [Inject]
+    public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
+    }
+
+    async Task Logout()
+    {
+        var response = await HttpClient.DeleteAsync("api/logout");
+        if (response.IsSuccessStatusCode)
+        {
+            await ((CookieAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsLoggedOut();
+        }
     }
 }

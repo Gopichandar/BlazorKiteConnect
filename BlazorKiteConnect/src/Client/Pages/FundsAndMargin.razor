@@ -1,0 +1,77 @@
+﻿@page "/margins"
+
+@if(!_isloading)
+{
+    @if (_marginResponse != null)
+    {
+        <MudText Typo="Typo.h5">@nameof(_marginResponse.Data.Equity)</MudText>
+
+         <MudSimpleTable Style="overflow-y: auto;">
+            <tbody>
+                <tr>
+                    <td><b>Enabled</b></td>
+                    <td><MudSwitch Color="Color.Primary" ReadOnly=true Checked="@_marginResponse.Data.Equity.Enabled"></MudSwitch>"</td>
+                </tr>
+                <tr>
+                    <td><b>Net</b></td>
+                    <td>@_marginResponse.Data.Equity.Net</td>
+                </tr>
+                <tr>
+                    <td><b>Available Cash Balance</b></td>
+                    <td>@_marginResponse.Data.Equity.Available.Cash</td>
+                </tr>
+                <tr>
+                    <td><b>Available Live Balance</b></td>
+                    <td>@_marginResponse.Data.Equity.Available.LiveBalance</td>
+                </tr>
+                <tr>
+                    <td><b>M2M Realised</b></td>
+                    <td>@_marginResponse.Data.Equity.Utilised.M2mRealised</td>
+                </tr>
+                <tr>
+                    <td><b>M2M Unrealised</b></td>
+                    <td>@_marginResponse.Data.Equity.Utilised.M2mUnrealised</td>
+                </tr>
+            </tbody>
+        </MudSimpleTable>
+
+        <MudText Typo="Typo.h5">@nameof(_marginResponse.Data.Commodity)</MudText>
+
+        <MudSimpleTable Style="overflow-y: auto;">
+            <tbody>
+                <tr>
+                    <td><b>Enabled</b></td>
+                    <td><MudSwitch Color="Color.Primary" ReadOnly=true Checked="@_marginResponse.Data.Commodity.Enabled"></MudSwitch>"</td>
+                </tr>
+                <tr>
+                    <td><b>Net</b></td>
+                    <td>@_marginResponse.Data.Commodity.Net</td>
+                </tr>
+                <tr>
+                    <td><b>Available Cash Balance</b></td>
+                    <td>@_marginResponse.Data.Commodity.Available.Cash</td>
+                </tr>
+                <tr>
+                    <td><b>Available Live Balance</b></td>
+                    <td>@_marginResponse.Data.Commodity.Available.LiveBalance</td>
+                </tr>
+                <tr>
+                    <td><b>M2M Realised</b></td>
+                    <td>@_marginResponse.Data.Commodity.Utilised.M2mRealised</td>
+                </tr>
+                <tr>
+                    <td><b>M2M Unrealised</b></td>
+                    <td>@_marginResponse.Data.Commodity.Utilised.M2mUnrealised</td>
+                </tr>
+            </tbody>
+        </MudSimpleTable>
+    }
+    else
+    {
+        <MudText Class="mb-8">Error fetching user data!</MudText>
+    }
+}
+else
+{
+    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+}

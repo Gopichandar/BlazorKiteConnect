@@ -1,8 +1,14 @@
 ﻿@page "/login"
 @using System.Web;
 
-
-<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@OnLogin">Sign in with kite</MudButton>
+@if (!_loading)
+{
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@OnLogin">Sign in with kite</MudButton>
+}
+else
+{
+    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+}
 
 @code{
     [Inject]
@@ -14,19 +20,23 @@
     [Inject]
     public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
+    private bool _loading = false;
+
     protected override async Task OnInitializedAsync()
     {
         var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri); //you can use IURIHelper for older versions
         var queries = uri.Query == null ? null : HttpUtility.ParseQueryString(uri.Query);
         if (queries is not null && queries["status"] == "success" && queries["request_token"] is not null)
         {
+            _loading = true;
             var response = await HttpClient.GetAsync("api/login/token?request_token=" + queries["request_token"]);
             if (response.IsSuccessStatusCode)
             {
                 var currentUser = await response.Content.ReadFromJsonAsync<GetTokenReponse>();
                 await ((CookieAuthenticationStateProvider)AuthenticationStateProvider).MarkUserAsAuthenticated(currentUser.Data.Email);
-                NavigationManager.NavigateTo("/", true);
+                NavigationManager.NavigateTo("/", false);
             }
+            _loading = false;
         }
     }   
 

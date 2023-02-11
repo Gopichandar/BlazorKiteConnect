@@ -1,6 +1,8 @@
-﻿using BlazorKiteConnect.Server.Configuration;
+﻿using BlazorKiteConnect.Server.Application.Interface.Profile;
+using BlazorKiteConnect.Server.Configuration;
 using FastEndpoints;
 using Microsoft.Extensions.Options;
+using System.Security.Claims;
 
 namespace BlazorKiteConnect.Server.Endpoints.Login
 {

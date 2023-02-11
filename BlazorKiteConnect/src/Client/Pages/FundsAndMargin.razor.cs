@@ -1,14 +1,12 @@
 ﻿using BlazorKiteConnect.Shared.KiteModel;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
-using System.Net.Http;
 using System.Net.Http.Json;
 
 namespace BlazorKiteConnect.Client.Pages
 {
-    public partial class Index
+    public partial class FundsAndMargin
     {
-        private GetProfileResponse _user;
+        private FundsAndMarginResponse _marginResponse;
         private bool _isloading = false;
 
         [Inject]
@@ -16,11 +14,11 @@ namespace BlazorKiteConnect.Client.Pages
         protected override async Task OnInitializedAsync()
         {
             _isloading = true;
-            var response = await HttpClient.GetAsync("api/profile");
+            var response = await HttpClient.GetAsync("api/margins");
 
             if (response.IsSuccessStatusCode)
             {
-                _user = await response.Content.ReadFromJsonAsync<GetProfileResponse>();
+                _marginResponse = await response.Content.ReadFromJsonAsync<FundsAndMarginResponse>();
             }
             _isloading = false;
             await base.OnInitializedAsync();

@@ -1,6 +1,53 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
-
-<MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
-<MudText Class="mb-8">Welcome to BlazorKiteConnect!</MudText>
+@if(!_isloading)
+{
+    @if (_user != null)
+    {
+        <MudText Typo="Typo.h3" GutterBottom="true">@($"Hello, {_user.Data.UserShortname}!")</MudText>
+        <MudSimpleTable Style="overflow-y: auto;">
+            <tbody>
+                <tr>
+                    <td><b>UserId</b></td>
+                    <td>@_user.Data.UserId</td>
+                </tr>
+                <tr>
+                    <td><b>UserName</b></td>
+                    <td>@_user.Data.UserName</td>
+                </tr>
+                <tr>
+                    <td><b>Email</b></td>
+                    <td>@_user.Data.Email</td>
+                </tr>
+                <tr>
+                    <td><b>Broker</b></td>
+                    <td>@_user.Data.Broker</td>
+                </tr>
+                <tr>
+                    <td><b>UserType</b></td>
+                    <td>@string.Join(",", _user.Data.UserType)</td>
+                </tr>
+                <tr>
+                    <td><b>Products</b></td>
+                    <td>@string.Join(",", _user.Data.Products)</td>
+                </tr>
+                <tr>
+                    <td><b>Exchanges</b></td>
+                    <td>@string.Join(",", _user.Data.Exchanges)</td>
+                </tr>
+                <tr>
+                    <td><b>OrderTypes</b></td>
+                    <td>@string.Join(",", _user.Data.OrderTypes)</td>
+                </tr>                
+            </tbody>
+        </MudSimpleTable>
+    }
+    else
+    {
+        <MudText Class="mb-8">Error fetching user data!</MudText>
+    }
+}
+else
+{
+    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+}

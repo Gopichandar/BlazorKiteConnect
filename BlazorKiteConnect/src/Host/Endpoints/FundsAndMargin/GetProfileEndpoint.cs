@@ -13,26 +13,27 @@ using BlazorKiteConnect.Shared.Constants;
 using BlazorKiteConnect.Server.Application.Interface;
 using BlazorKiteConnect.Shared.KiteModel;
 using BlazorKiteConnect.Server.Application.Interface.Profile;
+using BlazorKiteConnect.Server.Application.Interface.FundsAndMargin;
 
-namespace BlazorKiteConnect.Server.Endpoints.Profile
+namespace BlazorKiteConnect.Server.Endpoints.FundsAndMargin
 {
     public class GetProfileEndpoint : EndpointWithoutRequest
-    {        
-        private readonly IProfileService _profileService;
+    {   
+        private readonly IFundsAndMarginService _fundsAndMarginService;
 
-        public GetProfileEndpoint(IProfileService profileService)
-        {
-            _profileService = profileService;
+        public GetProfileEndpoint(IFundsAndMarginService fundsAndMarginService)
+        {            
+            _fundsAndMarginService = fundsAndMarginService;
         }
         public override void Configure()
         {
-            Get("api/profile");
+            Get("api/margins");
             //AllowAnonymous();
         }
 
         public override async Task HandleAsync(CancellationToken ct)
         {
-            var result = await _profileService.Create("")
+            var result = await _fundsAndMarginService.Create("")
                 .PrepareRequestBody()
                 .AddRequiredHeader()
                 .SendRequestAsync();
