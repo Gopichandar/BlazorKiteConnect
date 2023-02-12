@@ -24,7 +24,7 @@ bashCopy code
 
 1.  Open the solution file in Visual Studio or another .NET development environment.
 
-2.  Replace `[YOUR_API_KEY]` with your actual Zerodha Kite trading API key in the `appsettings.json` file. Note: The API secret should not be shared with anyone and should be kept secret.
+2.  Replace [YOUR_API_KEY] and [YOUR_API_SECRET] with your actual Zerodha Kite trading API key and secret in the appsettings.json file. Note: The API secret should not be shared with anyone and should be kept secret.
 
 3.  Build and run the application by pressing `F5` or using the "Run" menu.
 
