@@ -4,11 +4,13 @@ using BlazorKiteConnect.Server.Application.Interface.Instruments;
 using BlazorKiteConnect.Server.Application.Interface.Login;
 using BlazorKiteConnect.Server.Application.Interface.Profile;
 using BlazorKiteConnect.Server.Configuration;
+using BlazorKiteConnect.Server.Persistence;
 using BlazorKiteConnect.Server.Services;
 using BlazorKiteConnect.Shared.Constants;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,7 +51,19 @@ builder.Services.AddScoped<IFundsAndMarginService, FundsAndMarginService>();
 builder.Services.AddScoped<ILogoutService, LogoutService>();
 builder.Services.AddScoped<IInstrumentsService, InstrumentsService>();
 
+//persistance
+builder.Services.AddDbContext<KiteAppContext>();
+
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var context = services.GetRequiredService<KiteAppContext>();
+    context.Database.Migrate();
+}
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

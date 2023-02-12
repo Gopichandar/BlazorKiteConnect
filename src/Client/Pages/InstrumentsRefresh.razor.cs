@@ -1,9 +1,18 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using BlazorKiteConnect.Shared.ViewModel;
+using Microsoft.AspNetCore.Components;
+using System.Net.Http.Json;
 
 namespace BlazorKiteConnect.Client.Pages
 {
     public partial class InstrumentsRefresh
     {
+
+        protected override async Task OnInitializedAsync()
+        {
+            var lutResponse = await HttpClient.GetFromJsonAsync<InstrumentsLutResponse>("api/instruments/lut");
+            _lut = lutResponse.Data.Lut;            
+            await base.OnInitializedAsync();
+        }
 
         [Inject]
         public HttpClient HttpClient { get; set; }
@@ -12,7 +21,9 @@ namespace BlazorKiteConnect.Client.Pages
 
         private string _text = "";
 
-        async Task ProcessSomething()
+        private DateTime _lut;
+
+        async Task Process()
         {
             _processing = true;
             var response = await HttpClient.GetAsync("api/instruments/refresh");
@@ -22,7 +33,7 @@ namespace BlazorKiteConnect.Client.Pages
             }
             else
             {
-                _text = "RRefresh failed!";
+                _text = "Refresh failed!";
             }
             _processing = false;
         }
