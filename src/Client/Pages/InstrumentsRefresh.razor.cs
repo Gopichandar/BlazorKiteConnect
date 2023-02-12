@@ -9,8 +9,7 @@ namespace BlazorKiteConnect.Client.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            var lutResponse = await HttpClient.GetFromJsonAsync<InstrumentsLutResponse>("api/instruments/lut");
-            _lut = lutResponse.Data.Lut;            
+            await UpdateLut();
             await base.OnInitializedAsync();
         }
 
@@ -30,12 +29,19 @@ namespace BlazorKiteConnect.Client.Pages
             if (response.IsSuccessStatusCode)
             {
                 _text = "Refresh successful!";
+                await UpdateLut();
             }
             else
             {
                 _text = "Refresh failed!";
             }
             _processing = false;
+        }
+
+        async Task UpdateLut()
+        {
+            var lutResponse = await HttpClient.GetFromJsonAsync<InstrumentsLutResponse>("api/instruments/lut");
+            _lut = lutResponse.Data.Lut;
         }
     }
 }
