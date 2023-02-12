@@ -20,7 +20,7 @@ Getting Started
 
 bashCopy code
 
-`git clone https://github.com/[username]/zerodha-kite-trading-api-client.git`
+`git clone https://github.com/Gopichandar/BlazorKiteConnect.git`
 
 1.  Open the solution file in Visual Studio or another .NET development environment.
 
