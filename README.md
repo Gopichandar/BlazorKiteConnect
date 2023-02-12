@@ -1,7 +1,7 @@
 BlazorKiteConnect
 ===============================
 
-This application is a client for the Zerodha Kite trading API, built using Blazor WebAssembly and ASP.NET Core. It allows users to connect to their Zerodha trading account and access various trading functionalities, such as placing orders and retrieving market data.
+This application is a client for the Zerodha Kite trading API, built using Blazor WebAssembly and ASP.NET Core. It allows users to connect to their Zerodha trading account and access various trading functionalities, such as placing orders and retrieving market data. The application uses the [Mudblazor](https://github.com/MudBlazor/MudBlazor) library for UI components and the [FastEndpoint]([https://github.com/kevinkuszyk/FastEndpoint](https://github.com/FastEndpoints/FastEndpoints)) library for connecting to the Zerodha Kite trading API.
 
 Prerequisites
 -------------
