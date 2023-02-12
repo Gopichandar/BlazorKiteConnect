@@ -1,0 +1,15 @@
+﻿@page "/instruments/refresh"
+
+<MudButton Disabled="@_processing" OnClick="ProcessSomething" Variant="Variant.Filled" Color="Color.Primary">
+    @if (_processing)
+    {
+        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+        <MudText Class="ms-2">Processing</MudText>
+    }
+    else
+    {
+        <MudText>Refresh</MudText>
+    }
+</MudButton>
+
+<MudAlert Class="mt-4">@_text</MudAlert>

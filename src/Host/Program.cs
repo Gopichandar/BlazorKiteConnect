@@ -1,5 +1,6 @@
 ﻿using BlazorKiteConnect.Server.Application.Interface;
 using BlazorKiteConnect.Server.Application.Interface.FundsAndMargin;
+using BlazorKiteConnect.Server.Application.Interface.Instruments;
 using BlazorKiteConnect.Server.Application.Interface.Login;
 using BlazorKiteConnect.Server.Application.Interface.Profile;
 using BlazorKiteConnect.Server.Configuration;
@@ -46,6 +47,7 @@ builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IFundsAndMarginService, FundsAndMarginService>();
 builder.Services.AddScoped<ILogoutService, LogoutService>();
+builder.Services.AddScoped<IInstrumentsService, InstrumentsService>();
 
 var app = builder.Build();
 
