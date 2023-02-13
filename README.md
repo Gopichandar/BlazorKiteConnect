@@ -45,7 +45,7 @@ If you would like to contribute to this project, please submit a pull request wi
 License
 -------
 
-This project is licensed under the MIT License. See the [LICENSE](https://chat.openai.com/LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/Gopichandar/BlazorKiteConnect/blob/main/LICENSE) file for details.
 
 Acknowledgements
 ----------------
